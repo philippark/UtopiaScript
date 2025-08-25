@@ -1,5 +1,6 @@
-This is my code for JLox as I follow along "Crafting Interpreters" By Robert Nystrom.
+# This is my code for JLox as I follow along "Crafting Interpreters" By Robert Nystrom.
 
+<!--
 4.Scanning
 5.Representing Code
 6.Parsing Expressions
@@ -10,9 +11,11 @@ This is my code for JLox as I follow along "Crafting Interpreters" By Robert Nys
 11.Resolving and Binding
 12.Classes
 13.Inheritance
+-->
 
+## II. A Tree-Walk Interpreter 
 
-### II. A Tree-Walk Interpreter
+### Chapters
 |Resource|Progress|
 |---|---|
 |[4.Scanning]|⬜|
