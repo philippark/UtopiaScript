@@ -1,4 +1,4 @@
-package com.craftinginterpreters.lox;
+package utopiascript;
 
 class AstPrinter implements Expr.Visitor<String> {
     String print(Expr expr){

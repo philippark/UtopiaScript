@@ -1,4 +1,4 @@
-package com.craftinginterpreters.lox;
+package utopiascript;
 
 public class RuntimeError extends RuntimeException{
     final Token token;

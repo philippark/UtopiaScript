@@ -1,12 +1,12 @@
 //> Scanning scanner-class
-package com.craftinginterpreters.lox;
+package utopiascript;
+
+import static utopiascript.TokenType.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.craftinginterpreters.lox.TokenType.*; // [static-import]
 
 class Scanner {
     //> keyword-map
@@ -133,7 +133,7 @@ class Scanner {
                     identifier();
 //< identifier-start
                 } else {
-                    Lox.error(line, "Unexpected character.");
+                    Utopiascript.error(line, "Unexpected character.");
                 }
 //< digit-start
                 break;
@@ -180,7 +180,7 @@ class Scanner {
         }
 
         if (isAtEnd()) {
-            Lox.error(line, "Unterminated string.");
+            Utopiascript.error(line, "Unterminated string.");
             return;
         }
 

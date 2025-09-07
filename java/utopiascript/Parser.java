@@ -1,9 +1,9 @@
-package com.craftinginterpreters.lox;
+package utopiascript;
+
+import static utopiascript.TokenType.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.craftinginterpreters.lox.TokenType.*;
 
 public class Parser {
     private static class ParseError extends RuntimeException {}
@@ -127,7 +127,7 @@ public class Parser {
     }
 
     private ParseError error(Token token, String message) {
-        Lox.error(token, message);
+        Utopiascript.error(token, message);
         return new ParseError();
     }
 

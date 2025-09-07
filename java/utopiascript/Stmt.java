@@ -1,4 +1,4 @@
-package com.craftinginterpreters.lox;
+package utopiascript;
 
 abstract class Stmt {
   interface Visitor<R> {
