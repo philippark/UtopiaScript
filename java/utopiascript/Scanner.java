@@ -133,7 +133,7 @@ class Scanner {
                     identifier();
 //< identifier-start
                 } else {
-                    Utopiascript.error(line, "Unexpected character.");
+                    UtopiaScript.error(line, "Unexpected character.");
                 }
 //< digit-start
                 break;
@@ -180,7 +180,7 @@ class Scanner {
         }
 
         if (isAtEnd()) {
-            Utopiascript.error(line, "Unterminated string.");
+            UtopiaScript.error(line, "Unterminated string.");
             return;
         }
 

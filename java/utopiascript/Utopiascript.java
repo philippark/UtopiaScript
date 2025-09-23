@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class Utopiascript {
+public class UtopiaScript {
   static boolean hadError = false;
   static boolean hadRuntimeError = false;
 

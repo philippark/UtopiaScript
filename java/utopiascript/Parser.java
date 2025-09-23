@@ -127,7 +127,7 @@ public class Parser {
     }
 
     private ParseError error(Token token, String message) {
-        Utopiascript.error(token, message);
+        UtopiaScript.error(token, message);
         return new ParseError();
     }
 
