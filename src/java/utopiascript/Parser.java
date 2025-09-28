@@ -28,7 +28,7 @@ public class Parser {
     }
 
     private Stmt statement() {
-        if (match(PRINT)) return printStatement();
+        if (match(PRESI)) return printStatement();
 
         return expressionStatement();
     }
@@ -103,9 +103,9 @@ public class Parser {
     }
 
     private Expr primary() {
-        if (match(FALSE)) return new Expr.Literal(false);
-        if (match(TRUE)) return new Expr.Literal(true);
-        if (match(NIL)) return new Expr.Literal(null);
+        if (match(MALVERA)) return new Expr.Literal(false);
+        if (match(VERA)) return new Expr.Literal(true);
+        if (match(NENIO)) return new Expr.Literal(null);
 
         if (match(NUMBER, STRING)) {
             return new Expr.Literal(previous().literal);
@@ -140,14 +140,14 @@ public class Parser {
             }
 
             switch (peek().type){
-                case CLASS:
-                case FUN:
+                case KLASO:
+                case FUNKCIO:
                 case VAR:
-                case FOR:
-                case IF:
-                case WHILE:
-                case PRINT:
-                case RETURN:
+                case POR:
+                case SE:
+                case DUM:
+                case PRESI:
+                case REVENIGI:
                     return;
             }
 

@@ -14,8 +14,10 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     private String stringify(Object object) {
-        if (object == null) return "nil";
-
+        if (object == null) return "nenio";
+        if (object == Boolean.TRUE) return "vera";
+        if (object == Boolean.FALSE) return "malvera";
+    
         if (object instanceof Double){
             String text = object.toString();
             if (text.endsWith(".0")){
