@@ -3,6 +3,8 @@ package utopiascript;
 import java.util.List;
 
 class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
+    private Environment environment = new Environment();
+
     void interpret(List<Stmt> statements){
         try {
             for (Stmt statement : statements){
@@ -14,8 +16,10 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     private String stringify(Object object) {
-        if (object == null) return "nil";
-
+        if (object == null) return "nenio";
+        if (object == Boolean.TRUE) return "vera";
+        if (object == Boolean.FALSE) return "malvera";
+    
         if (object instanceof Double){
             String text = object.toString();
             if (text.endsWith(".0")){
@@ -156,5 +160,22 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         if (a == null && b == null) return true;
         if (a == null) return false;
         return a.equals(b);
+    }
+
+    @Override 
+    public Object visitVariableExpr(Expr.Variable expr) {
+        return environment.get(expr.name);
+    }
+
+    @Override
+    public Void visitVarStmt(Stmt.Var stmt) {
+        Object value = null;
+
+        if (stmt.initializer != null) {
+            value = evaluate(stmt.initializer);
+        }
+
+        environment.define(stmt.name.lexeme, value);
+        return null;
     }
 }

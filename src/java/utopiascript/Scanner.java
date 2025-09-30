@@ -14,22 +14,22 @@ class Scanner {
 
     static {
         keywords = new HashMap<>();
-        keywords.put("and",    AND);
-        keywords.put("class",  CLASS);
-        keywords.put("else",   ELSE);
-        keywords.put("false",  FALSE);
-        keywords.put("for",    FOR);
-        keywords.put("fun",    FUN);
-        keywords.put("if",     IF);
-        keywords.put("nil",    NIL);
-        keywords.put("or",     OR);
-        keywords.put("print",  PRINT);
-        keywords.put("return", RETURN);
+        keywords.put("kaj",    KAJ);
+        keywords.put("klaso",  KLASO);
+        keywords.put("alie",   ALIE);
+        keywords.put("malvera",  MALVERA);
+        keywords.put("por",    POR);
+        keywords.put("funkcio",    FUNKCIO);
+        keywords.put("se",     SE);
+        keywords.put("nenio",    NENIO);
+        keywords.put("aŭ",     AŬ);
+        keywords.put("presi",  PRESI);
+        keywords.put("revenigi", REVENIGI);
         keywords.put("super",  SUPER);
-        keywords.put("this",   THIS);
-        keywords.put("true",   TRUE);
+        keywords.put("mem",   MEM);
+        keywords.put("vera",   VERA);
         keywords.put("var",    VAR);
-        keywords.put("while",  WHILE);
+        keywords.put("dum",  DUM);
     }
     //< keyword-map
     private final String source;
