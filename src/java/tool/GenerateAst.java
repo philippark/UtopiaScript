@@ -7,13 +7,12 @@ import java.util.List;
 
 public class GenerateAst {
   public static void main(String[] args) throws IOException {
-    /*
     if (args.length != 1){
       System.err.println("Usage: generate_ast <output directory>");
       System.exit(64);
-    }*/
-    String outputDir = "C:\\Users\\phili\\Desktop\\coding_projects\\utopiascript\\src\\java\\utopiascript";
-    System.out.println(outputDir);
+    }
+
+    String outputDir = args[0];
 
     defineAst(outputDir, "Expr", Arrays.asList(
         "Assign : Token name, Expr value",
@@ -28,7 +27,8 @@ public class GenerateAst {
             "Expression : Expr expression",
             "Print      : Expr expression",
             "Var   : Token name, Expr initializer",
-            "Block  : List<Stmt> statements"
+            "Block  : List<Stmt> statements",
+            "If     : Expr condition, Stmt thenBranch, Stmt elseBranch"
     ));
 
   }

@@ -59,6 +59,7 @@ public class Parser {
     private Stmt statement() {
         if (match(PRESI)) return printStatement();
         if (match(LEFT_BRACE)) return new Stmt.Block(block());
+        if (match(SE)) return ifStatement();
 
         return expressionStatement();
     }
@@ -79,6 +80,21 @@ public class Parser {
         consume(RIGHT_BRACE, "Expect '}' after block.");
 
         return statements;
+    }
+
+    private Stmt ifStatement() {
+        consume(LEFT_BRACE, "Expect '(' after 'if'");
+        Expr condition = expression();
+        consume(RIGHT_BRACE, "Expect ')' after if condition");
+
+        Stmt thenBranch = statement();
+        Stmt elseBranch = null;
+
+        if (match(ALIE)) {
+            elseBranch = statement();
+        }
+
+        return new Stmt.If(condition, thenBranch, elseBranch);
     }
 
     private Stmt varDeclaration() {
