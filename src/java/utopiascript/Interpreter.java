@@ -245,4 +245,18 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
         return null;
     }
+
+    /**
+     * @brief Interprets the while statement
+     * 
+     * @param stmt The while statement object
+     */
+    @Override
+    public Void visitWhileStmt(Stmt.While stmt) {
+        while (isTruthy(evaluate(stmt.condition))) {
+            execute(stmt.body);
+        }
+
+        return null;
+    }
 }

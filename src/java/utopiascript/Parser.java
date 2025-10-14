@@ -92,6 +92,7 @@ public class Parser {
         if (match(PRESI)) return printStatement();
         if (match(LEFT_BRACE)) return new Stmt.Block(block());
         if (match(SE)) return ifStatement();
+        if (match(DUM)) return whileStatement();
 
         return expressionStatement();
     }
@@ -127,6 +128,20 @@ public class Parser {
         }
 
         return new Stmt.If(condition, thenBranch, elseBranch);
+    }
+    
+    /**
+     * @brief Generates the parse tree for the while statement
+     * @return A Stmt object for the while statement
+     */
+    private Stmt whileStatement() {
+        consume(LEFT_PAREN, "Expect an opening '(' after while");
+        Expr condition = expression();
+        consume(RIGHT_PAREN, "Expect a closing ')' after condition");
+
+        Stmt body = statement();
+
+        return new Stmt.While(condition, body);
     }
 
     private Stmt varDeclaration() {
