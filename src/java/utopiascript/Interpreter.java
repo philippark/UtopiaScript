@@ -37,6 +37,32 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         return expr.value;
     }
 
+    /**
+     * @brief The logical expression interpreter
+     * 
+     * @param expr The logical expression
+     * @return The evaluated value of the logical expression
+     */
+    @Override
+    public Object visitLogicalExpr(Expr.Logical expr) {
+        Object left = evaluate(expr.left);
+
+        // if "or" and first expression is true, it's true
+        if (expr.operator.type == TokenType.AŬ) {
+            if (isTruthy(expr.left)) {
+                return true;
+            }
+        } 
+        // if "and" and first expression is false, it's false
+        else {
+            if (!isTruthy(expr.left)) {
+                return left;
+            }
+        }
+
+        return evaluate(expr.right);
+    }
+
     @Override
     public Object visitGroupingExpr(Expr.Grouping expr){
         return evaluate(expr.expression);

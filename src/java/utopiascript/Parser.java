@@ -28,7 +28,7 @@ public class Parser {
     }
 
     private Expr assignment() {
-        Expr expr = equality();
+        Expr expr = or();
 
         if (match(EQUAL)) {
             Token equals = previous();
@@ -40,6 +40,38 @@ public class Parser {
             }
 
             error(equals, "Invalid assignment target.");
+        }
+
+        return expr;
+    }
+
+    /**
+     * @brief Generates parse tree for logical or
+     * @return The resulting expression object of the logical or
+     */
+    private Expr or() {
+        Expr expr = and();
+
+        while (match(AŬ)) {
+            Token operator = previous();
+            Expr right = and();
+            expr = new Expr.Logical(expr, operator, right);
+        }
+
+        return expr;
+    }
+
+    /**
+     * @brief Generates parse tree for logical and
+     * @return The resulting expression object of the logical and
+     */
+    private Expr and() {
+        Expr expr = equality();
+
+        while (match(KAJ)) {
+            Token operator = previous();
+            Expr right = equality();
+            expr = new Expr.Logical(expr, operator, right);
         }
 
         return expr;
