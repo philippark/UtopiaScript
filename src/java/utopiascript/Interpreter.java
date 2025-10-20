@@ -49,13 +49,13 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
         // if "or" and first expression is true, it's true
         if (expr.operator.type == TokenType.AU) {
-            if (isTruthy(expr.left)) {
+            if (isTruthy(left)) {
                 return true;
             }
         } 
         // if "and" and first expression is false, it's false
         else {
-            if (!isTruthy(expr.left)) {
+            if (!isTruthy(left)) {
                 return left;
             }
         }
