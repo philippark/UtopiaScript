@@ -15,8 +15,22 @@ enum TokenType {
     IDENTIFIER, STRING, NUMBER,
 
     // Keywords.
-    KAJ, KLASO, ALIE, MALVERA, FUNKCIO, POR, SE, NENIO, AŬ,
-    PRESI, REVENIGI, SUPER, MEM, VERA, VAR, DUM,
+    KAJ, // And
+    KLASO, // Class
+    ALIE, // Else
+    MALVERA, // False
+    FUNKCIO, // Function
+    POR, // For
+    SE, // If
+    NENIO, // Nil
+    AU, // Or
+    PRESI, // Print
+    REVENIGI, // Return
+    SUPER, // Super
+    MEM, // This
+    VERA, // True
+    VAR, // Variable
+    DUM, // While
 
     EOF
 };

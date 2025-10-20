@@ -48,7 +48,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         Object left = evaluate(expr.left);
 
         // if "or" and first expression is true, it's true
-        if (expr.operator.type == TokenType.AŬ) {
+        if (expr.operator.type == TokenType.AU) {
             if (isTruthy(expr.left)) {
                 return true;
             }

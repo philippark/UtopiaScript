@@ -22,7 +22,7 @@ class Scanner {
         keywords.put("funkcio",    FUNKCIO);
         keywords.put("se",     SE);
         keywords.put("nenio",    NENIO);
-        keywords.put("aŭ",     AŬ);
+        keywords.put("au",     AU);
         keywords.put("presi",  PRESI);
         keywords.put("revenigi", REVENIGI);
         keywords.put("super",  SUPER);
@@ -92,7 +92,6 @@ class Scanner {
                 else if (match('*')){
                     while (!isAtEnd()){
                         char next = advance();
-                        System.out.println("next: " + next);
                         if (next == '*' && match('/')){
                             break;
                         }

@@ -52,7 +52,7 @@ public class Parser {
     private Expr or() {
         Expr expr = and();
 
-        while (match(AŬ)) {
+        while (match(AU)) {
             Token operator = previous();
             Expr right = and();
             expr = new Expr.Logical(expr, operator, right);
