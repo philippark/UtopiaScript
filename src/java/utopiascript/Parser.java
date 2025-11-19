@@ -221,7 +221,7 @@ public class Parser {
      * @brief Parses a function declaration
      * Function declaration takes the form of: Name(parameters). parameters are optional.
      * @param kind specifies type of declaration. 
-     * @return The parse tree 
+     * @return The parse tree for a function declaration
      */
     private Stmt.Function function(String kind) {
         Token name = consume(IDENTIFIER, "Expect " + kind + " name.");
@@ -237,6 +237,10 @@ public class Parser {
             } while (match(COMMA));
         }
         consume(RIGHT_PAREN, "Expect ')' after parameters");
+
+        consume(LEFT_BRACE, "Expect '{' before " + kind + " body");
+        List<Stmt> body = block();
+        return new Stmt.Function(name, parameters, body);
     }
 
     private Expr equality() {
