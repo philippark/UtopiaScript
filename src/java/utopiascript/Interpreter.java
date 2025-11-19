@@ -309,5 +309,16 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         }
 
         return function.call(this, arguments);
+    } 
+
+    /**
+     * @brief Interprets a function declaration
+     * @param stmt the function statement
+     */
+    @Override
+    public Void visitFunctionStmt(Stmt.Function stmt) {
+        UtopiaScriptFunction function = new UtopiaScriptFunction(stmt);
+        environment.define(stmt.name.lexeme, function);
+        return null;
     }
 }
