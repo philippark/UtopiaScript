@@ -95,6 +95,7 @@ public class Parser {
         if (match(SE)) return ifStatement();
         if (match(DUM)) return whileStatement();
         if (match(POR)) return forStatement();
+        if (match(REVENIGI)) return returnStatement();
 
         return expressionStatement();
     }
@@ -241,6 +242,25 @@ public class Parser {
         consume(LEFT_BRACE, "Expect '{' before " + kind + " body");
         List<Stmt> body = block();
         return new Stmt.Function(name, parameters, body);
+    }
+
+    /**
+     * @brief Parses a return statement
+     * value is optional, default value is null
+     * 
+     * @return The parse tree for a return statement
+     */
+    private Stmt returnStatement() {
+        Token keyword = previous();
+
+        Expr value = null;
+        if (!check(SEMICOLON)) {
+            value = expression();
+        }
+
+        consume(SEMICOLON, "Expect a ';' after return statement");
+
+        return new Stmt.Return(keyword, value);
     }
 
     private Expr equality() {

@@ -321,4 +321,18 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         environment.define(stmt.name.lexeme, function);
         return null;
     }
+
+    /**
+     * @brief Interprets a return statement
+     * @param stmt the parse tree for a return statement
+     */
+    @Override
+    public Void visitReturnStmt(Stmt.Return stmt) {
+        Object value = null;
+        if (stmt.value != null) {
+            value = evaluate(stmt.value);
+        }
+
+        throw new Return(value);
+    }
 }
