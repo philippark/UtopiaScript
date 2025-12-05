@@ -1,5 +1,7 @@
 # UtopiaScript
 
+<center><img src="logo.png" width="200" height="200"></center>
+
 ## About 
 
 UtopiaScript is an object oriented imperative scripting language with a syntax following Esperanto. 
@@ -13,19 +15,20 @@ UtopiaScript aims to be an international auxiliary programming language designed
 these linguistic and cultural barriers in the programming world. Its core mission is to establish a 
 universal standard for collaboration and code sharing.
 
-## Project Status
+## Examples
 
-### Expressions:
-* Arithmetic ✅
-* Comparison and equality ✅
-* Logical operators ✅
-* Precedence and grouping ✅
+```
+// Implements fibonacci sequence
 
-### Statements:
-* Printing ✅
-* Variables 🚧
-* Control Flow ⬜
-* Functions ⬜
-* Closures ⬜
-* Classes ⬜
-* Standard Library ⬜
+var prev2 = 0;
+var prev1 = 1;
+var val = 0;
+
+por (var i = 2; i < 10; i = i + 1){
+    val = prev2 + prev1;
+    presi("fibo: " + val);
+    
+    prev2 = prev1;
+    prev1 = val;
+}
+```
