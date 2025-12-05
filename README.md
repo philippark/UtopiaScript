@@ -22,15 +22,12 @@ universal standard for collaboration and code sharing.
 ```
 // Implements fibonacci sequence
 
-var prev2 = 0;
-var prev1 = 1;
-var val = 0;
+funkcio fib(n) {
+    se (n <= 1) revenigi n;
+    revenigi fib(n - 2) + fib(n - 1);
+}
 
-por (var i = 2; i < 10; i = i + 1){
-    val = prev2 + prev1;
-    presi("fibo: " + val);
-    
-    prev2 = prev1;
-    prev1 = val;
+por (var i = 0; i < 5; i = i + 1) {
+    presi fib(i);
 }
 ```
