@@ -1,6 +1,8 @@
 # UtopiaScript
 
-<center><img src="logo.png" width="200" height="200"></center>
+<p align="center">
+    <img src="logo.png" width="200">
+</p>
 
 ## About 
 
