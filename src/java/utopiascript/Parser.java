@@ -411,6 +411,8 @@ public class Parser {
                 case PRESI:
                 case REVENIGI:
                     return;
+                default:
+                    break;
             }
 
             advance();
