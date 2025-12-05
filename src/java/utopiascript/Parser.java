@@ -46,10 +46,7 @@ public class Parser {
         return expr;
     }
 
-    /**
-     * @brief Generates parse tree for logical or
-     * @return The resulting expression object of the logical or
-     */
+    // Parses a logical or
     private Expr or() {
         Expr expr = and();
 
@@ -62,10 +59,7 @@ public class Parser {
         return expr;
     }
 
-    /**
-     * @brief Generates parse tree for logical and
-     * @return The resulting expression object of the logical and
-     */
+    // Parses a logical and
     private Expr and() {
         Expr expr = equality();
 
@@ -99,7 +93,8 @@ public class Parser {
 
         return expressionStatement();
     }
-
+    
+    // Parses a print statement
     private Stmt printStatement() {
         Expr value = expression();
         consume(SEMICOLON, "Expect ; after value.");
@@ -118,6 +113,8 @@ public class Parser {
         return statements;
     }
 
+    // Parses a if statement
+    // else is optional
     private Stmt ifStatement() {
         consume(LEFT_PAREN, "Expect '(' after 'if'");
         Expr condition = expression();
@@ -133,10 +130,7 @@ public class Parser {
         return new Stmt.If(condition, thenBranch, elseBranch);
     }
     
-    /**
-     * @brief Generates the parse tree for the while statement
-     * @return A Stmt object for the while statement
-     */
+    // Parses a while statement
     private Stmt whileStatement() {
         consume(LEFT_PAREN, "Expect an opening '(' after while");
         Expr condition = expression();
@@ -147,16 +141,14 @@ public class Parser {
         return new Stmt.While(condition, body);
     }
 
-    /**
-     * @brief Parses the for statement, which is composed of: 
-     * for (initializer; condition; increment). 
-     * The initializer, condition, and increment are optional.
-     * The for loop is syntatic sugar that is desugarized to rely on the while loop.
-     * @return A parse tree for the for statement
-     */
+    // Parses a for statement
+    // for (initializer; condition; increment). 
+    // The initializer, condition, and increment are optional.
+    // The for loop is syntatic sugar that is desugarized to rely on the while loop.
     private Stmt forStatement() {
         consume(LEFT_PAREN, "Expect '(' after 'for'.");
 
+        // check for initializer
         Stmt initializer;
         if (match(SEMICOLON)) {
             initializer = null;
@@ -166,18 +158,21 @@ public class Parser {
             initializer = expressionStatement();
         }
 
+        // check for condition
         Expr condition = null;
         if (!check(SEMICOLON)) {
             condition = expression();
         }
         consume(SEMICOLON, "Expect ';' after loop condition");
 
+        // check for increment
         Expr increment = null;
         if (!check(RIGHT_PAREN)) {
             increment = expression();
         }
         consume(RIGHT_PAREN, "Expect ')' after for clauses.");
 
+        // grab the body
         Stmt body = statement();
 
         if (increment != null) {
@@ -199,6 +194,7 @@ public class Parser {
         return body;
     }
 
+    // Parses a variable declaration
     private Stmt varDeclaration() {
         Token name = consume(IDENTIFIER, "Expect variable name");
 
@@ -211,23 +207,21 @@ public class Parser {
 
         return new Stmt.Var(name, initializer);
     }
-
+    
     private Stmt expressionStatement() {
         Expr expr = expression();
         consume(SEMICOLON, "Expect ; after expression.");
         return new Stmt.Expression(expr);
     }
 
-    /**
-     * @brief Parses a function declaration
-     * Function declaration takes the form of: Name(parameters). parameters are optional.
-     * @param kind specifies type of declaration. 
-     * @return The parse tree for a function declaration
-     */
+    // Parses a function declaration
+    // Function declaration takes the form of: Name(parameters). parameters are optional.
     private Stmt.Function function(String kind) {
+        // check for name
         Token name = consume(IDENTIFIER, "Expect " + kind + " name.");
         consume(LEFT_PAREN, "Expect '(' after " + kind + " name.");
 
+        // check for parameters
         List<Token> parameters = new ArrayList<>();
         if (!check(RIGHT_PAREN)) {
             do {
@@ -240,16 +234,15 @@ public class Parser {
         consume(RIGHT_PAREN, "Expect ')' after parameters");
 
         consume(LEFT_BRACE, "Expect '{' before " + kind + " body");
+        
+        // grab the body
         List<Stmt> body = block();
+
         return new Stmt.Function(name, parameters, body);
     }
 
-    /**
-     * @brief Parses a return statement
-     * value is optional, default value is null
-     * 
-     * @return The parse tree for a return statement
-     */
+    // Parses a return statement
+    // value is optional, default is null
     private Stmt returnStatement() {
         Token keyword = previous();
 
@@ -263,6 +256,7 @@ public class Parser {
         return new Stmt.Return(keyword, value);
     }
 
+    // Parses an equality comparison
     private Expr equality() {
         Expr expr = comparison();
         while (match(BANG_EQUAL, EQUAL_EQUAL)){
@@ -274,6 +268,7 @@ public class Parser {
         return expr;
     }
     
+    // Parses a comparison
     private Expr comparison() {
         Expr expr = term();
 
@@ -285,7 +280,9 @@ public class Parser {
 
         return expr;
     }
-
+   
+    // Parses a term
+    // A term is an expression that can be evaluated to a value
     private Expr term() {
         Expr expr = factor();
 
@@ -298,6 +295,8 @@ public class Parser {
         return expr;
     }
 
+    // Parses a factor
+    // A factor is a binary operator for multiplication and division
     private Expr factor() {
         Expr expr = unary();
 
@@ -310,6 +309,8 @@ public class Parser {
         return expr;
     }
 
+    // Parses a unary
+    // A unary is of the form !x or -x
     private Expr unary() {
         if (match(BANG, MINUS)) {
             Token operator = previous();
@@ -320,6 +321,7 @@ public class Parser {
         return call();
     }
 
+    // Parses a call expression using the previously parsed expression as the callee
     private Expr finishCall(Expr callee) {
         List<Expr> arguments = new ArrayList<>();
 
@@ -338,6 +340,7 @@ public class Parser {
         return new Expr.Call(callee, paren, arguments);
     }
 
+    // Parses a function call
     private Expr call() {
         Expr expr = primary();
 
@@ -352,6 +355,7 @@ public class Parser {
         return expr;
     }
 
+    // Parses primaries
     private Expr primary() {
         if (match(MALVERA)) return new Expr.Literal(false);
         if (match(VERA)) return new Expr.Literal(true);
@@ -374,17 +378,21 @@ public class Parser {
         throw error(peek(), "Expect expression.");
     }
 
+    // consumes a token
     private Token consume(TokenType type, String message) {
         if (check(type)) return advance();
 
         throw error(peek(), message);
     }
 
+    // handles parse errors
     private ParseError error(Token token, String message) {
         UtopiaScript.error(token, message);
         return new ParseError();
     }
 
+    // Synchronizes token stream by discarding tokens until it reaches a point that can start a rule
+    // Used when there is a parsing error
     private void synchronize() {
         advance();
 
@@ -409,6 +417,7 @@ public class Parser {
         }
     }
 
+    // Matches for a token
     private boolean match(TokenType... types){
         for (TokenType type : types){
             if (check(type)){
@@ -420,11 +429,13 @@ public class Parser {
         return false;
     }
 
+    // Checks for a token type
     private boolean check(TokenType type){
         if (isAtEnd()) return false;
         return peek().type == type;
     }
 
+    // Advances the token stream
     private Token advance(){
         if (!isAtEnd()) current++;
         return previous();

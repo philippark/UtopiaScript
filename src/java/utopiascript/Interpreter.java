@@ -10,6 +10,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     private Environment environment = globals;
 
     Interpreter() {
+        // define a library function for determining time
         globals.define("clock", new UtopiaScriptCallable() {
             @Override
             public int arity() { return 0; }
@@ -34,6 +35,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         }
     }
 
+    // Stringifies an object for output
     private String stringify(Object object) {
         if (object == null) return "nenio";
         if (object == Boolean.TRUE) return "vera";
@@ -56,12 +58,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         return expr.value;
     }
 
-    /**
-     * @brief The logical expression interpreter
-     * 
-     * @param expr The logical expression
-     * @return The evaluated value of the logical expression
-     */
+    // Interprets a logical expression
     @Override
     public Object visitLogicalExpr(Expr.Logical expr) {
         Object left = evaluate(expr.left);
@@ -87,6 +84,8 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         return evaluate(expr.expression);
     }
 
+    // Interprets a unary expression
+    // A unary is of the form !x or -x
     @Override
     public Object visitUnaryExpr(Expr.Unary expr){
         Object right = evaluate(expr.right);
@@ -97,6 +96,8 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
                 return -(double)right;
             case BANG:
                 return !isTruthy(right);
+            default:
+                break;
         }
 
         return null;
@@ -112,6 +113,8 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         throw new RuntimeError(operator, "Operands must be numbers.");
     }
 
+    // Interprets a binary expression
+    // A binary expression is of the form: left operator right
     @Override
     public Object visitBinaryExpr(Expr.Binary expr){
         Object right = evaluate(expr.right);
@@ -168,6 +171,9 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             case BANG_EQUAL: return !isEqual(left, right);
 
             case EQUAL_EQUAL: return isEqual(left, right);
+
+            default:
+                break;
         }
 
         return null;
@@ -187,6 +193,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         return null;
     }
 
+    // Interprets a print statement
     @Override
     public Void visitPrintStmt(Stmt.Print stmt){
         Object value = evaluate(stmt.expression);
@@ -194,6 +201,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         return null;
     }
 
+    // Helper to check if an object should be evaluated to true or false
     private boolean isTruthy(Object object){
         if (object == null) return false;
         if (object instanceof Boolean) return (boolean)object;
@@ -201,12 +209,15 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         return true;
     }
 
+    // Helper to check if two objects should be considered equal or not
     private boolean isEqual(Object a, Object b) {
         if (a == null && b == null) return true;
         if (a == null) return false;
         return a.equals(b);
     }
 
+    // Interprets a variable expression
+    // Grabs the value for the variable from the environment's map of values to values
     @Override 
     public Object visitVariableExpr(Expr.Variable expr) {
         Object value = environment.get(expr.name);
@@ -216,6 +227,8 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         return value;
     }
 
+    // Interprets a definition of a variable
+    // Evaluates the value and stores into the environment's map of vars to values
     @Override
     public Void visitVarStmt(Stmt.Var stmt) {
         Object value = null;
@@ -228,6 +241,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         return null;
     }
 
+    // Interprets an assignment expression
     @Override
     public Object visitAssignExpr(Expr.Assign expr) {
         Object value = evaluate(expr.value);
@@ -242,18 +256,22 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     void executeBlock(List<Stmt> statements, Environment environment) {
+        // hold outer scope environment
         Environment previous = this.environment;
 
         try {
+            // set current scope environment
             this.environment = environment;
             for (Stmt statement : statements) {
                 execute(statement);
             }
         } finally {
+            // restore outer scope environment after inner scope is done
             this.environment = previous;
         }
     }
 
+    // Interprets an if statement
     @Override
     public Void visitIfStmt(Stmt.If stmt) {
         if (isTruthy(evaluate(stmt.condition))) {
@@ -265,11 +283,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         return null;
     }
 
-    /**
-     * @brief Interprets the while statement
-     * 
-     * @param stmt The while statement object
-     */
+    // Interprets a while statement
     @Override
     public Void visitWhileStmt(Stmt.While stmt) {
         while (isTruthy(evaluate(stmt.condition))) {
@@ -279,11 +293,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         return null;
     }
 
-    /**
-     * @brief Interprets a function call 
-     * @param expr the expression that holds the function call
-     * @return the value of the function call 
-     */
+    // Interprets a function call
     @Override
     public Object visitCallExpr(Expr.Call expr) {
         Object callee = evaluate(expr.callee);
@@ -294,6 +304,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             arguments.add(evaluate(argument));
         }
 
+        // check if the object is even callable
         if (!(callee instanceof UtopiaScriptCallable)) {
             throw new RuntimeError(expr.paren, 
                 "Can only call functions and classes");
@@ -301,7 +312,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
         UtopiaScriptCallable function = (UtopiaScriptCallable)callee;
 
-        // check arity
+        // check that the number of parameters is equal to the number of arguments
         if (arguments.size() != function.arity()) {
             throw new RuntimeError(expr.paren, "Expected " + 
             function.arity() + " arguments but got " +
@@ -311,10 +322,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         return function.call(this, arguments);
     } 
 
-    /**
-     * @brief Interprets a function declaration
-     * @param stmt the function statement
-     */
+    // Interprets a function declaration
     @Override
     public Void visitFunctionStmt(Stmt.Function stmt) {
         UtopiaScriptFunction function = new UtopiaScriptFunction(stmt);
@@ -322,10 +330,8 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         return null;
     }
 
-    /**
-     * @brief Interprets a return statement
-     * @param stmt the parse tree for a return statement
-     */
+    // Interprets a return statement
+    // default return value is a null
     @Override
     public Void visitReturnStmt(Stmt.Return stmt) {
         Object value = null;
